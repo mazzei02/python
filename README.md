@@ -1,3 +1,3 @@
 Tomás Tobías Mazzei
-Lic. en astronomia
+Licenciatura en astronomia
 Seminario de Lenguajes: "Python", 2023
