@@ -1,0 +1,609 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # Python 2023 - Práctica 2
+
+# ## Objetivos
+# 
+# - Comenzar a resolver problemas un poco más complejos.
+# - Utilizar correctamente las estructuras de datos de Python
+#   tratando de hacer la elección más adecuada de acuerdo al problema.
+
+# # Ejercicios
+
+# 1. Tomando el texto del `README.md` de [numpy](https://github.com/numpy/numpy), copiar y pegar el texto en una variable, luego imprima todas las líneas que contienen 'http' o 'https'.
+# 
+# 
+
+# In[2]:
+
+
+with open('README.md', 'r') as file:
+    README = file.read().rstrip()
+print(README.count('http:')+README.count('https'))
+README
+
+
+# In[3]:
+
+
+RENGLONES=README.split('\n')
+for i in range(len(RENGLONES)):
+    if 'http:' in RENGLONES[i] or 'https:' in RENGLONES[i]:
+        print(RENGLONES[i])
+
+
+# 2. Indique la palabra que aparece mayor cantidad de veces en el texto del `README.md` de numpy. Copie y pegue el texto en una varible. 
+# 
+# Recordemos algunas funciones de string:
+# * lower
+# * split
+# 
+
+# Investigue el módulo [Counter](https://docs.python.org/3/library/collections.html#collections.Counter) para simplificar la resolución.
+
+# In[4]:
+
+
+import string
+
+
+
+helplist=README
+
+
+for element in string.punctuation:
+#    print(element)
+    helplist=helplist.replace(element, " ")
+    
+print(helplist)
+
+README_LIST=helplist.split()
+
+readme_list=README_LIST.copy()
+
+for i in range(len(README_LIST)):
+    readme_list[i]=README_LIST[i].lower()
+
+
+for i in range(len(README_LIST)):
+    print(README_LIST[i].lower())
+
+
+# In[5]:
+
+
+from collections import Counter as Cnt
+c = Cnt(readme_list)
+claves=c.keys()
+
+
+
+
+for i in claves:
+    if c[i] == max(c.values()):
+        print(i)
+
+#print(c['the'])
+        
+print(c.most_common(1))
+
+
+# ## Identificando mayúsculas, minúsculas y caracteres no letras
+
+# In[6]:
+
+
+texto="Pepepepepepe pepepepepe pepepepepepeeeeee"
+caracter = "T"
+print(texto.split()[0].startswith(caracter))
+        
+
+
+# ¿Pero qué pasa si queremos saber indistintamente si la palabra comienza con dicha letra en minúscula o mayúscula?
+
+# In[7]:
+
+
+caracter = "t"
+print(texto.lower().split()[0].startswith(caracter))
+        
+
+
+# ¿Y si el caracter ingresado no es una letra?
+
+# In[8]:
+
+
+import string
+caracter = "?"
+print(caracter in string.ascii_letters)
+
+
+# 3. Dado el siguiente texto guardado en la varible *jupyter_info*,  solicite por teclado **una letra** e imprima las palabras que comienzan con dicha letra. En caso que no se haya inrgesado un letra, indique el error. *Ver: módulo string*
+# 
+# ```python
+# jupyter_info = """ JupyterLab is a web-based interactive development environment for Jupyter notebooks, 
+# code, and data. JupyterLab is flexible: configure and arrange the user interface to support a wide range 
+# of workflows in data science, scientific computing, and machine learning. JupyterLab is extensible and
+# modular: write plugins that add new components and integrate with existing ones.
+# """
+# ```
+
+# In[9]:
+
+
+jupyter_info = """ JupyterLab is a web-based interactive development environment for Jupyter notebooks, 
+code, and data. JupyterLab is flexible: configure and arrange the user interface to support a wide range 
+of workflows in data science, scientific computing, and machine learning. JupyterLab is extensible and
+modular: write plugins that add new components and integrate with existing ones.
+"""
+
+
+# In[10]:
+
+
+jupyter=jupyter_info.split()
+jupyter
+
+def retorno_letras(texto):
+    
+    """ Esta funcion, para un dado un texto, busca toda palabra que comience con una letra ingresada por teclado"""
+    
+    letter=input("Ingrese una letra y la bucaremos en el texto: ")
+    
+    a=[]
+    
+    if not letter in string.ascii_letters:
+        print("Epaaaa, eso no es una letra papa, dale media pila...")
+    else:
+        for i in texto:
+            if i.lower().startswith(letter.lower()):
+                print(i)
+                a.append(i)
+        if len(a)==0:
+            print(f"No hay palabras con la letra {letter}")
+
+retorno_letras(jupyter)
+
+
+# In[11]:
+
+
+def letras_retorno(texto):
+    
+    """ Esta funcion, para un dado un texto, busca toda palabra que comience con una letra ingresada por teclado"""
+    
+    letter=input("Ingrese una letra y la bucaremos en el texto: ")
+    a=[]
+    
+    if not letter in string.ascii_letters:
+        print("Epaaaa, eso no es una letra papa, dale media pila...")
+    else:
+        
+        [print(i) for i in texto if i.lower().startswith(letter.lower())]
+        [a.append(i) for i in texto if i.lower().startswith(letter.lower())]
+        
+        if len(a)==0:
+            print(f"No hay palabras con la letra {letter}")
+letras_retorno(jupyter)
+
+
+# 4. Para la aceptación de un artículo en un congreso se definen las siguientes especificaciones que deben cumplir y recomendaciones de escritura:
+# * **título**: 10 palabras como máximo
+# * cada oración del **resumen**:
+#     * hasta 12 palabras: fácil de leer
+#     * entre 13-17 palabras:  aceptable para leer
+#     * entre 18-25 palabras: difícil de leer
+#     * mas de 25 palabras: muy difícil
+# 
+# Dado un artículo en formato string, defina si cumple las especificaciones del título y cuántas oraciones tiene de cada categoría. El formato estándar en que recibe el string tiene la siguiente forma:
+# ```Python
+# 
+# evaluar = """ título: Experiences in Developing a Distributed Agent-based Modeling Toolkit with Python
+# resumen: Distributed agent-based modeling (ABM) on high-performance computing resources provides the promise of capturing unprecedented details of large-scale complex systems. However, the specialized knowledge required for developing such ABMs creates barriers to wider adoption and utilization. Here we present our experiences in developing an initial implementation of Repast4Py, a Python-based distributed ABM toolkit. We build on our experiences in developing ABM toolkits, including Repast for High Performance Computing (Repast HPC), to identify the key elements of a useful distributed ABM toolkit. We leverage the Numba, NumPy, and PyTorch packages and the Python C-API to create a scalable modeling system that can exploit the largest HPC resources and emerging computing architectures.
+# """
+# ```
+
+# In[12]:
+
+
+def contador_palabras(lista):
+    """Esta funcion cuenta la cantidad de palabras en cada elemento de una lista"""
+    cantidad = {}
+    
+    
+    for element in lista:
+        words=element.split()
+        cantidad[element]=len(words)
+    
+    return cantidad
+    
+
+
+# In[13]:
+
+
+evaluar = """ título: Experiences in Developing a Distributed Agent-based Modeling Toolkit with Python
+resumen: Distributed agent-based modeling (ABM) on high-performance computing resources provides the promise of capturing unprecedented details of large-scale complex systems. However, the specialized knowledge required for developing such ABMs creates barriers to wider adoption and utilization. Here we present our experiences in developing an initial implementation of Repast4Py, a Python-based distributed ABM toolkit. We build on our experiences in developing ABM toolkits, including Repast for High Performance Computing (Repast HPC), to identify the key elements of a useful distributed ABM toolkit. We leverage the Numba, NumPy, and PyTorch packages and the Python C-API to create a scalable modeling system that can exploit the largest HPC resources and emerging computing architectures.
+"""
+Tit_y_Res=evaluar.split("resumen:",2)
+resumen=Tit_y_Res[1].split(".")
+
+titulo=Tit_y_Res[0].split(":",2)
+titulo.remove(titulo[0])
+
+
+# In[14]:
+
+
+largo_titulo=contador_palabras(titulo)
+print(largo_titulo)
+
+
+# In[15]:
+
+
+largo_resumen=contador_palabras(resumen)
+
+
+# In[16]:
+
+
+facil=0
+aceptable=0
+dificil=0
+mdificil=0
+
+#print(largo_titulo.values())
+
+if largo_titulo[titulo[0]] > 10:
+    print("Tu titulo es muy largo")
+else:
+    print('El titulo tiene buen largo')
+    for i in largo_resumen.values():
+        if i <= 12:
+            facil+=1
+        elif i <= 17:
+            aceptable+=1
+        elif i <=25:
+            dificil+=1
+        else:
+            mdificil+=1
+
+print(facil, aceptable, dificil, mdificil)
+            
+
+
+# En este ejemplo se debe informar:
+#    * título: ok
+#    * Cantidad de oraciones fáciles de leer: 1, aceptables para leer: 2, dificil de leer: 1,  muy difícil de leer: 2
+
+#  5. Dada una frase y un string ingresados por teclado (en ese orden), genere una lista de palabras, y sobre ella, informe la cantidad de palabras en las que se encuentra el string. No distingir entre mayúsculas y minúsculas.
+# 
+# **Ejemplo 1**
+# 
+# - **Para la frase**: "Tres tristes tigres, tragaban trigo en un trigal, en tres tristes trastos, tragaban trigo tres tristes tigres."
+# - **Palabra**: "tres"
+# - **Resultado**: 3
+# 
+# **Ejemplo 2**
+# 
+# - **Para la frase**: "Tres tristes tigres, tragaban trigo en un trigal, en tres tristes trastos, tragaban trigo tres tristes tigres."
+# - **Palabra**: "tigres"
+# - **Resultado**: 2
+# 
+# **Ejemplo 3**
+# 
+# - **Para la frase**: "Tres tristes tigres, tragaban trigo en un trigal, en tres tristes trastos, tragaban trigo tres tristes tigres."
+# - **Palabra**: "TRISTES"
+# - **Resultado**: 3
+
+# In[17]:
+
+
+frase = input("Ingrese una frase: ")
+palabra = input("Ingrese una palabra, sin espacios: ")
+
+for element in string.punctuation:
+#    print(element)
+    frase=frase.replace(element, " ")
+
+frase=frase.split()
+Count=0
+
+if " " in palabra:
+    
+    print("Escribiste espacios en tu palabra unica, no es valido")
+else:
+        for a in frase:
+            
+            if a.lower() == palabra.lower():
+                Count+=1
+                #print(a, a.lower() == palabra.lower(), Count)
+                
+                
+print(Count)
+        
+
+
+# 6. Retomamos el código visto en la teoría, que informaba si una palabra contenía la letra *a* en una palabra ingresada
+
+# In[18]:
+
+
+palabra = input("Ingresá una palabra: ")
+if "a" in palabra and "n" in palabra:
+    print("Hay letras a y n.")
+elif "a" in palabra:
+    print("Hay letras a.")
+elif "n" in palabra:
+    print("Hay letras n.")
+else:
+    print("No hay letras a ni n. ")
+
+
+# Si ahora queremos saber si contiene la letra *a* y también la letra *n*, cómo lo modificamos?
+
+# 7. Dada una frase identificar mayúsculas, minúsculas y caracteres no letras y contar la cantidad de palabras sin distinguir entre mayúsculas y minúsculas, en la frase. 
+# ```python
+# texto = """
+#  El salario promedio de un hombre en Argentina es de $60.000, mientras que el de una mujer es de $45.000. Además, las mujeres tienen menos posibilidades de acceder a puestos de liderazgo en las empresas.
+#   """
+# ```
+
+# In[19]:
+
+
+texto = """
+    El salario promedio de un hombre en Argentina es de $60.000, mientras que el de una mujer es de $45.000.
+    Además, las mujeres tienen menos posibilidades de acceder a puestos de liderazgo en las empresas.
+    """
+
+
+# In[20]:
+
+
+listext= texto.split()
+
+nonletters=[]
+lowercase=[]
+uppercase=[]
+
+
+
+def checkin(lista,tex):
+    
+        yourlist=[]
+        for element in lista:
+            if element in tex:
+                yourlist.append(element)
+        return yourlist
+
+nonletters=checkin(string.punctuation+string.digits, texto)
+
+lowercase=checkin(string.ascii_lowercase, texto)
+
+uppercase=checkin(string.ascii_uppercase, texto)
+
+
+
+print(nonletters)
+print(lowercase)
+print(uppercase)
+
+
+#for element in listext:
+    
+    
+    #tomi capo <3
+
+
+# 8. Escriba un programa que solicite que se ingrese una palabra o frase y permita identificar si la misma es un [Heterograma](https://es.qaz.wiki/wiki/Isogram) (tenga en cuenta que el contenido del enlace es una traducción del inglés por lo cual las palabras que nombra no son heterogramas en español). Un Heterograma es una palabra o frase que no tiene ninguna letra repetida entre sus caracteres.
+# 
+# **Tener en cuenta**
+# - Lo que no se puede repetir en la frase son sólo aquellos caracteres que sean letras.
+# - No se distingue entre mayúsculas y minúsculas, es decir si en la frase o palabra tenemos la letra "T" y la letra "t" la misma NO será un Hererograma.
+# - Para simplificar el ejercicio vamos a tomar como que las letras con tilde y sin tilde son distintas. Ya que Python las diferencia:
+# ```python
+# >>> 'u' == 'ú'
+# False
+# ```
+# 
+# **Ejemplos**
+# 
+# |Entreda|¿Heterograma?|
+# |-----|-----|
+# |cruzamiento|Sí|
+# |centrifugados|Sí|
+# |portón|Sí|
+# |casa|No|
+# |día de sol|No|
+# |con diez uñas|Sí|
+# |no-se-duplica|Sí|
+
+# In[21]:
+
+
+frase=input("Ingrese una palabra o frase: ")
+
+
+for element in string.punctuation:
+    frase=frase.replace(element, " ")
+
+frase=frase.split()
+
+
+letras=[]
+for element in frase:
+    letras=letras+list(element.lower())
+
+
+setdeletras=set(letras)
+
+print("Es la frase un Hetereograma?", len(letras)==len(setdeletras))
+    
+
+
+
+# 9. Escriba un programa que solicite por teclado una palabra y calcule el valor de la misma dada la siguiente tabla de valores del juego Scrabble:
+# 
+# 
+# |Letra                       |valor|
+# |-----                       |-----|
+# |A, E, I, O, U, L, N, R, S, T|1|
+# |D, G                        |2|
+# |B, C, M, P                  |3|
+# |F, H, V, W, Y               |4|
+# |K                           |5|
+# |J, X                        |8|
+# |Q, Z                        |10|
+# 
+# <center>
+#   <i>*Tenga en cuenta qué estructura elige para guardar estos valores en Python</i>
+# </center>
+# 
+# **Ejemplo 1**
+# 
+# - **Palabra**: "solo"
+# - **valor**: 4
+# 
+# **Ejemplo 2**
+# 
+# - **Palabra**: "tomate"
+# - **valor**: 8
+
+# 10. Dada una lista de nombres de estudiantes y dos listas con sus notas en un curso, escriba un programa que manipule dichas estructuras de datos para poder resolver los siguientes puntos:
+#     1. Generar una estructura todas las notas sin que se repitan, sin guardar los nombres de los estudiantes.
+#     2. Calcular el promedio de notas de cada estudiante.
+#     3. Calcular el promedio general del curso.
+#     4. Identificar al estudiante con la nota promedio más alta.
+#     5. Identificar al estudiante con la nota más baja.
+# 
+# 
+# **Nota**:
+# - Las 3 estructuras están ordenadas de forma que los elementos en la misma posición corresponden a un mismo alumno.
+# - Realizar funciones con cada item
+# 
+# 
+
+# In[42]:
+
+
+nombres = ''' 'Agustin', 'Alan', 'Andrés', 'Ariadna', 'Bautista', 'CAROLINA', 'CESAR',
+'David','Diego', 'Dolores', 'DYLAN', 'ELIANA', 'Emanuel', 'Fabián', 'Facundo',
+'Francsica', 'FEDERICO', 'Fernanda', 'GONZALO', 'Gregorio', 'Ignacio', 'Jonathan',
+'Joaquina', 'Jorge', 'JOSE', 'Javier', 'Joaquín' , 'Julian', 'Julieta', 'Luciana',
+'LAUTARO', 'Leonel', 'Luisa', 'Luis', 'Marcos', 'María', 'MATEO', 'Matias',
+'Nicolás', 'Nancy', 'Noelia', 'Pablo', 'Priscila', 'Sabrina', 'Tomás', 'Ulises',
+'Yanina' '''
+notas_1 = [81,  60, 72, 24, 15, 91, 12, 70, 29, 42, 16, 3, 35, 67, 10, 57, 11, 69, 12, 77, 
+           13, 86, 48, 65, 51, 41, 87, 43, 10, 87, 91, 15, 44, 85, 73, 37, 42, 95, 18, 7, 
+           74, 60, 9, 65, 93, 63, 74]
+notas_2 = [30, 95, 28, 84, 84, 43, 66, 51, 4, 11, 58, 10, 13, 34, 96, 71, 86, 37, 64, 13, 8,
+           87, 14, 14, 49, 27, 55, 69, 77, 59, 57, 40, 96, 24, 30, 73, 95, 19, 47, 15, 31,
+           39, 15, 74, 33, 57, 10]
+
+
+# In[49]:
+
+
+#CONVERTIMOS EL ARCHIVO DE NOMBRES EN UNA LISTA PARA OPERAR CON FACILIDAD
+
+ID=nombres.replace('\n',' ').replace('\'', '').split(',') 
+
+print((ID))
+
+
+# In[24]:
+
+
+#CONVERTIMOS LAS TRES LISTAS EN UN DICCIONARIO, DONDE LAS CLAVES SON LOS NOMBRES Y LOS VALUES SON LAS LISTAS
+#DE NOTAS
+registro={}
+for i in range(len(ID)):
+    registro[ID[i]]=[notas_1[i],notas_2[i]]
+print(registro)
+
+
+# In[58]:
+
+
+def promedio(**kwargs):
+    
+    """ Este programa, dado un diccionario de los estudiantes con notas calcula el promedio de estas notas 
+    e imprime por pantalla el promedio del estudiante junto con su nombre. Además, calcula el promedio general 
+    de la clase en base a los promedios individuales y devuelve un diccionario con el promedio de cada estudiante"""
+    
+    PROM_GRAL=0
+    
+    registro_de_promedio={}
+    
+    for clave, valor in kwargs.items():    #recorremos los items del diccionario
+        
+        a=0                                # a sera la variable donde sumaremos las notas para el promedio
+        cont=0                         # En un principio supondremos la cantidad de notas desconocidas para ello 
+                                       # cont contabilizara las notas y dividira "a" para el promedio 
+        
+        for i in valor:
+            a+=i
+            cont+=1
+        
+        a/=cont
+        
+        print(f"El promedio de{clave} es {a}")
+        
+        PROM_GRAL+=a                   # en cada iteracion del for sumamos la nota del alumno al promedio gral
+        
+        registro_de_promedio[clave]=a  # ...y la añadimos a un diccionario que contiene solo {nombre: promedio}
+        
+    PROM_GRAL/=len(kwargs)             # Finalmente, una vez recorridos todos los alumnos dividimos la suma de
+                                       #  promedio gral por la cantidad de alumnos para el promedio de la clase.
+    print()
+    print(f"""
+    ----------------------------------------
+    
+    El promedio general de la clase es {PROM_GRAL}
+        
+    ----------------------------------------------""")
+    
+    return registro_de_promedio
+
+
+registro_de_promedio=promedio(**registro)  #Llamamos a nuestra función sobre el diccionario que creamos
+
+
+# In[59]:
+
+
+help(promedio)
+
+
+# In[65]:
+
+
+#TOMAMOS EL DICCIONARIO DE SALIDA DE NUESTRA FUNCION Y LO SORTEAMOS SEGUN LA COLUMNA DE VALORES
+
+high_value= sorted(registro_de_promedio.items(), key=lambda item: item[1], reverse=True) #Sorteado de mayor a menor
+
+low_value=  sorted(registro_de_promedio.items(), key=lambda item: item[1]) #Sorteado de menor a mayor
+
+print(f"El mejor promedio es {high_value[0]}. El peor promedio es {low_value[0]}.")
+
+
+# # Entrega 2
+# ### Pautas
+#    * Suba la resolución total del **ejercicio 10** al repositorio individual de Github, luego elija uno de los siguientes items: A,C,D o E y realice un video explicando cómo lo resolvió y las decisiones que tomó implementando map, zip, lambda (por qué utilizó cada estructura de datos o estructura de control) y muestre la ejecución del programa en la terminal.
+#    * **Duración máxima del video**: 5 minutos
+# 
+#    * **Puntos**: 15.
+#    * **Fecha límite de entrega**: Viernes, 14 de abril de 2023, 23:59
+#    * **Modalidad de entrega**: Subir el programa al repositorio de github y copie el enlace del repositorio  junto con el link del video en la resolución de la tarea de Cátedras.
+# 
+# 
+
+# In[ ]:
+
+
+
+
