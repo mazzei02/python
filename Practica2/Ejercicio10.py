@@ -118,8 +118,7 @@ def registropromedio(**kwargs):
     de la clase en base a los promedios individuales y devuelve un diccionario con el promedio de cada estudiante"""
     
     PROM_GRAL=0
-    
-    registro_de_promedio={}
+
     
     for clave, valor in kwargs.items():    #recorremos los items del diccionario
         
@@ -132,18 +131,19 @@ def registropromedio(**kwargs):
             cont+=1
         
         a/=cont
-        registro_de_promedio[clave]=a  # ...y la añadimos a un diccionario que contiene solo {nombre: promedio}
+        
+        
+        
+        kwargs[clave].append(a)  # ...y la añadimos a un diccionario que contiene solo {nombre: promedio}
         
     print()
-    
-    return registro_de_promedio
 
 
 
 
 promedio(**registro)  #Llamamos a nuestra función sobre el diccionario que creamos
 promediogral(**registro)  #Llamamos a nuestra función sobre el diccionario que creamos
-registro_de_promedio=registropromedio(**registro)  #Llamamos a nuestra función sobre el diccionario que creamos
+registropromedio(**registro)  #Llamamos a nuestra función sobre el diccionario que creamos
 
 
 ###########################################################################################################
@@ -154,23 +154,26 @@ print()
 
 #TOMAMOS EL DICCIONARIO DE SALIDA DE NUESTRA FUNCION Y LO SORTEAMOS SEGUN LA COLUMNA DE VALORES
 
-high_value= max(registro_de_promedio.items(), key=lambda item: item[1]) #El maximo de la lista
+#TOMAMOS EL DICCIONARIO DE SALIDA DE NUESTRA FUNCION Y LO SORTEAMOS SEGUN LA COLUMNA DE VALORES
 
-print(f"El mejor promedio es {high_value[0]} con {high_value[1]}.")
+high_value= max(registro.items(), key=lambda item: item[1][2]) #Sorteado de mayor a menor
+
+print(f"El mejor promedio es {high_value[0]} con {high_value[1][2]}.")
 print()
 print()
 
 
 ###########################################################################################################
 
-min1=min(notas_1)
-min2=min(notas_2)
+min1=min(registro.items(), key=lambda item: item[1][0])
+min2=min(registro.items(), key=lambda item: item[1][1])
 
 for name in registro.keys():
     if min1 <= min2:
-        if registro[name][0]==min1:
+        if registro[name][0]==min1[1][0]:
             print(f"La menor nota es {name} con {registro[name][0]} en el primer examen")
-    elif min2 <= min1:
-        if registro[name][1]==min2:
+    elif min2 < min1:
+        if registro[name][1]==min2[1][1]:
             print(f"La menor nota es {name} con {registro[name][1]} en el segundo examen")
+        
         
