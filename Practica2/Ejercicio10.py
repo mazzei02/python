@@ -154,10 +154,23 @@ print()
 
 #TOMAMOS EL DICCIONARIO DE SALIDA DE NUESTRA FUNCION Y LO SORTEAMOS SEGUN LA COLUMNA DE VALORES
 
-high_value= sorted(registro_de_promedio.items(), key=lambda item: item[1], reverse=True) #Sorteado de mayor a menor
+high_value= max(registro_de_promedio.items(), key=lambda item: item[1]) #El maximo de la lista
 
-low_value=  sorted(registro_de_promedio.items(), key=lambda item: item[1]) #Sorteado de menor a mayor
-
-print(f"El mejor promedio es {high_value[0]}. El peor promedio es {low_value[0]}.")
+print(f"El mejor promedio es {high_value[0]} con {high_value[1]}.")
 print()
 print()
+
+
+###########################################################################################################
+
+min1=min(notas_1)
+min2=min(notas_2)
+
+for name in registro.keys():
+    if min1 <= min2:
+        if registro[name][0]==min1:
+            print(f"La menor nota es {name} con {registro[name][0]} en el primer examen")
+    elif min2 <= min1:
+        if registro[name][1]==min2:
+            print(f"La menor nota es {name} con {registro[name][1]} en el segundo examen")
+        
