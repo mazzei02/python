@@ -12,13 +12,6 @@
 
 ##########################################################################################################
 
-##COMENTARIO:
-#En el inciso E y por la notacion del ejercicio D dude de si se referia a la nota general mas baja o la nota
-#promedio mas baja, interprete que se referia a nota promedio, si es incorrecto habria que realizar el sorted
-#sobre los valores del diccionario original (veasé, "registro") y aplicar el lambda sobre los items de la lista
-#y quedarnos con el minimo.
-
-
 ##########################################################################################################
 
 nombres = ''' 'Agustin', 'Alan', 'Andrés', 'Ariadna', 'Bautista', 'CAROLINA', 'CESAR',
@@ -51,10 +44,8 @@ for i in range(len(ID)):
 
 ###########################################################################################################
 def promedio(**kwargs):
-    
-    """ Este programa, dado un diccionario de los estudiantes con notas calcula el promedio de estas notas 
-    e imprime por pantalla el promedio del estudiante junto con su nombre. Además, calcula el promedio general 
-    de la clase en base a los promedios individuales y devuelve un diccionario con el promedio de cada estudiante"""
+           
+        """ Esta funcion calcula el promedio de cada alumno """
     
     
     for clave, valor in kwargs.items():    #recorremos los items del diccionario
@@ -75,13 +66,10 @@ def promedio(**kwargs):
 
 def promediogral(**kwargs):
     
-    """ Este programa, dado un diccionario de los estudiantes con notas calcula el promedio de estas notas 
-    e imprime por pantalla el promedio del estudiante junto con su nombre. Además, calcula el promedio general 
-    de la clase en base a los promedios individuales y devuelve un diccionario con el promedio de cada estudiante"""
+    """ Esta funcion imprime el promedio gral del curso"""
     
     PROM_GRAL=0
     
-    registro_de_promedio={}
     
     for clave, valor in kwargs.items():    #recorremos los items del diccionario
         
@@ -113,11 +101,8 @@ def promediogral(**kwargs):
 
 def registropromedio(**kwargs):
     
-    """ Este programa, dado un diccionario de los estudiantes con notas calcula el promedio de estas notas 
-    e imprime por pantalla el promedio del estudiante junto con su nombre. Además, calcula el promedio general 
-    de la clase en base a los promedios individuales y devuelve un diccionario con el promedio de cada estudiante"""
+     """ Esta funcion se usa para añadir los promedios al diccionario """
     
-    PROM_GRAL=0
 
     
     for clave, valor in kwargs.items():    #recorremos los items del diccionario
