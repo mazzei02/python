@@ -10,15 +10,8 @@
 #- Las 3 estructuras están ordenadas de forma que los elementos en la misma posición corresponden a un mismo alumno.
 #- Realizar funciones con cada item
 
+
 ##########################################################################################################
-
-##COMENTARIO:
-#En el inciso E y por la notacion del ejercicio D dude de si se referia a la nota general mas baja o la nota
-#promedio mas baja, interprete que se referia a nota promedio, si es incorrecto habria que realizar el sorted
-#sobre los valores del diccionario original (veasé, "registro") y aplicar el lambda sobre los items de la lista
-#y quedarnos con el minimo.
-
-
 ##########################################################################################################
 
 nombres = ''' 'Agustin', 'Alan', 'Andrés', 'Ariadna', 'Bautista', 'CAROLINA', 'CESAR',
@@ -152,7 +145,7 @@ print()
 print()
 
 
-#TOMAMOS EL DICCIONARIO DE SALIDA DE NUESTRA FUNCION Y LO SORTEAMOS SEGUN LA COLUMNA DE VALORES
+#TOMAMOS EL DICCIONARIO DE SALIDA DE NUESTRA FUNCION Y NOS QUEDAMOS CON EL VALOR MAS ALTO
 
 high_value= max(registro_de_promedio.items(), key=lambda item: item[1]) #El maximo de la lista
 
@@ -163,11 +156,13 @@ print()
 
 ###########################################################################################################
 
+#VEMOS EN CUAL DE LAS LISTAS DE NOTAS ESTA EL MINIMO
+
 min1=min(notas_1)
 min2=min(notas_2)
 
 for name in registro.keys():
-    if min1 <= min2:
+    if min1 <= min2:                                        
         if registro[name][0]==min1:
             print(f"La menor nota es {name} con {registro[name][0]} en el primer examen")
     elif min2 <= min1:
