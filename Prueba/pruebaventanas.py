@@ -367,7 +367,9 @@ def Meme(ruta,ruta_configuracion,evento):
             image_data=fn.cargar_imagen(image_path)                                ###ACA LLAMO A LA FUNCION CARGAR IMAGEN PARA SACAR LOS DATOS
             window['Template'].update(data=image_data)                           ### y hago que aparezca la imagen en la ventana
         elif event == "Seleccionar" and image_data != None:
+            window.hide()
             Generador_de_memes(image_data,image_path, Repositorio_de_memes,ruta,evento)
+            window.un_hide()
         
 
 # Cerrar la ventana al salir
@@ -408,8 +410,14 @@ def Generador_de_memes(datos_de_la_imagen,path_de_la_imagen, carpeta_memes,ruta,
     	mi_template = filter(lambda d: nombre_del_template in d["imagen"], [diccionario for diccionario in coord_template])
     	coordenadas = list(map(lambda d: d["coordenadas"], mi_template))
     
+    #El siguiente if se encarga de tomar el numero de cuadros correcto,
+    #Si la imagen no esta aclarada en el json coord=[] y levantamos un popup
+    if coordenadas != []:
     # Obtengo el numero de cuadros de texto a partir de la cantidad de coordenadas brindadas en el json
-    num_cuadros = len(coordenadas[0])
+        num_cuadros = len(coordenadas[0])
+    else:
+        sg.popup('La imagen no esta configurada para template',title="Error")
+        return
 
     # Generar el layout dinámico con los cuadros de texto
     izquierda = [
@@ -456,226 +464,24 @@ def Generador_de_memes(datos_de_la_imagen,path_de_la_imagen, carpeta_memes,ruta,
     
 
  ############################################### COLLAGE ################################################################################
-def collage(ruta, ruta_configuracion):
 
-    ruta_carpeta_imagenes = os.path.join(ruta, "Imagenes")
-    ruta_carpeta_collages = os.path.join(ruta, "Collages")
-    ruta_templates = os.path.join(ruta_carpeta_collages, "Templates")
+def Collage ():
 
-    try:
-      with open(ruta_configuracion) as archivo:
-            Datos_de_configuracion = js.load(archivo) 	# Utilizamos filter para obtener los elementos del diccionario que contienen el alias que se pasó como parámetro
-            
-            configuracion_filtrada = filter(lambda d: evento in d["Alias"], Datos_de_configuracion) 	# Utilizamos map para obtener una lista con todos los repositorios de imágenes de los elementos filtrados
-            
-            repositorios = list(map(lambda d: d["Repositorio de imagenes"], configuracion_filtrada))        # Si no encontramos ninguna configuración que contenga el alias, utilizamos la ruta por defecto
-            Repositorio_de_imagenes = repositorios[0] if repositorios else ruta_carpeta_imagenes
-            
-            repositorio_collages = list(map(lambda d: d["Repositorio de collage"], configuracion_filtrada))
-            Repositorio_de_collages = repositorios_collages[0] if repositorio_collages else ruta_carpeta_collages
-        
-        
-    except FileNotFoundError:
-        sg.popup("No ha fijado su configuracion. Se usaran los valores predeterminados", title='Advertencia: No existe la configuracion')
-        Repositorio_de_imagenes=ruta_carpeta_imagenes
-        Repositorio_de_collages=ruta_carpeta_collages
-    except PermissionError:
-        sg.popup("No tienes permiso para leer este archivo.",title="Error escencial")
-        sys.exit()
-    except js.JSONDecodeError:
-        sg.popup("Un archivo vital no está en formato JSON válido.",title="Error escencial")
-        sys.exit()
+    """ Funcion que abre la interfaz de collage, no funcional"""
+    # Define el diseño de la ventana
+    layout = [[sg.Text("Actualmente en proceso.  \n No disponible aún", size=(20, 5), justification='center')]]
 
+# Crea la ventana
+    window = sg.Window('Generador de collage', layout) #window = sg.Window('Generador de collage', layout)
 
-# Define la interfaz gráfica de la primera ventana utilizando PySimpleGUI
-    layout_diseño = [
-        [sg.Text('Selecciona el diseño de collage')],
-        [
-        sg.Listbox(['Diseño 1', 'Diseño 2', 'Diseño 3', 'Diseño 4'], size=(20, 4), key='lista_diseños',enable_events=True), sg.VSeperator(),  
-        sg.Image(key='-IMAGEN-', size=(300, 300))
-        ],
-        [sg.Button('Seleccionar', key='seleccionar')]
-    ]
-
-    # Crea la primera ventana
-    ventana_diseño = sg.Window('Seleccionar diseño de collage', layout_diseño)
-
-    # Bucle de eventos de la primera ventana
+# Lee los eventos y datos de la ventana
     while True:
-        event, values = ventana_diseño.read()
-    
-        diseño_seleccionado = values['lista_diseños'][0]
-
-        num_imagenes = 0
-        if diseño_seleccionado == 'Diseño 1':
-            path_imagen=os.path.join(ruta_templates,"1.jpg")
-            image_data=fn.cargar_imagen(path_imagen)                                
-            ventana_diseño['-IMAGEN-'].update(data=image_data)
-            num_imagenes = 2
-        elif diseño_seleccionado == 'Diseño 2':
-            path_imagen=os.path.join(ruta_templates,"2.jpg")
-            image_data=fn.cargar_imagen(path_imagen)                                
-            ventana_diseño['-IMAGEN-'].update(data=image_data)
-            num_imagenes = 2
-        elif diseño_seleccionado == 'Diseño 3':
-            path_imagen=os.path.join(ruta_templates,"3.jpg")
-            image_data =fn.cargar_imagen(path_imagen)                                
-            ventana_diseño['-IMAGEN-'].update(data=image_data)
-            num_imagenes = 3
-        elif diseño_seleccionado == 'Diseño 4':
-            path_imagen=os.path.join(ruta_templates,"4.jpg")
-            image_data=fn.cargar_imagen(path_imagen)                                
-            ventana_diseño['-IMAGEN-'].update(data=image_data)
-            num_imagenes = 4
-
-        if event == sg.WINDOW_CLOSED:
+        event, values = window.read()
+        if event == sg.WIN_CLOSED:
             break
-        elif event == 'seleccionar':
-        
-            ventana_diseño.hide()  # Oculta la primera ventana
-            generador_de_collage(ruta, num_imagenes, diseño_seleccionado, ruta_carpeta_collages)
-            ventana_diseño.un_hide()
 
-        
-
-    ventana_diseño.close()
-
-#################################################### SELECCIONAR DE DISEÑO DE COLLAGE ###########################################################
-
-def seleccionador_diseño_collage(rutas_imagenes, ruta_salida, diseño):
-
-    # Carga las imágenes
-    imagenes = [Image.open(io.BytesIO(fn.cargar_imagen(ruta))) for ruta in rutas_imagenes]
-
-    if diseño == 'Diseño 1':
-        # Crea el collage en posición vertical
-        altura_total = sum(imagen.size[1] for imagen in imagenes)
-        ancho_maximo = max(imagen.size[0] for imagen in imagenes)
-
-        collage = Image.new('RGB', (ancho_maximo, altura_total))
-        y_offset = 0
-
-        for imagen in imagenes:
-            collage.paste(imagen, (0, y_offset))
-            y_offset += imagen.size[1]
-
-    elif diseño == 'Diseño 2':
-        # Crea el collage en posición horizontal
-        anchura_total = sum(imagen.size[0] for imagen in imagenes)
-        altura_maxima = max(imagen.size[1] for imagen in imagenes)
-
-        collage = Image.new('RGB', (anchura_total, altura_maxima))
-        x_offset = 0
-
-        for imagen in imagenes:
-            collage.paste(imagen, (x_offset, 0))
-            x_offset += imagen.size[0]
-
-    elif diseño == 'Diseño 3':
-        # Crea el collage con dos imágenes en posición horizontal y la tercera llena el resto del espacio
-        anchura_total = imagenes[0].size[0] + imagenes[1].size[0]
-        altura_total = max(imagenes[0].size[1], imagenes[1].size[1])
-
-        for imagen in imagenes[2:]:
-            altura_total += imagen.size[1]
-            anchura_total = max(anchura_total, imagen.size[0])
-
-        collage = Image.new('RGB', (anchura_total, altura_total))
-        x_offset = 0
-
-        for imagen in imagenes[:2]:
-            collage.paste(imagen, (x_offset, 0))
-            x_offset += imagen.size[0]
-
-        y_offset = max(imagenes[0].size[1], imagenes[1].size[1])
-
-        for imagen in imagenes[2:]:
-            new_width = anchura_total
-            new_height = altura_total - y_offset
-            imagen_modificada = imagen.resize((new_width, new_height))
-            collage.paste(imagen_modificada, (0, y_offset))
-            y_offset += new_height
-
-    elif diseño == 'Diseño 4':
-        # Crea el collage con cuatro imágenes en las esquinas
-        anchura_total = max(imagen.size[0] for imagen in imagenes)
-        altura_total = max(imagen.size[1] for imagen in imagenes)
-
-        collage = Image.new('RGB', (anchura_total * 2, altura_total * 2))
-
-        # Esquina superior izquierda
-        collage.paste(imagenes[0], (0, 0))
-
-        # Esquina superior derecha
-        collage.paste(imagenes[1], (anchura_total, 0))
-
-        # Esquina inferior izquierda
-        collage.paste(imagenes[2], (0, altura_total))
-
-        # Esquina inferior derecha
-        collage.paste(imagenes[3], (anchura_total, altura_total))
-
-    # Guarda el collage en el archivo de salida
-    collage.save(os.path.join('Collages',ruta_salida))
-
-#################################################### GENERADOR DE COLLAGE ##########################################################################
-
-def generador_de_collage(ruta, num_imagenes, diseño_seleccionado, ruta_collages):
-        
-        ruta_imagenes=os.path.join(ruta,'Collages','previa.jpg')
-
-        # Define la interfaz gráfica de la segunda ventana utilizando PySimpleGUI
-        layout = [
-            [sg.Text('Selecciona las imágenes para el collage')],
-        ]
-
-    
-        for i in range(num_imagenes):
-            layout.append([sg.Input(key=f'imagen{i}', enable_events=True,disabled=True, visible=True), sg.FileBrowse(f'Imagen {i+1}')])
-
-        layout.append([sg.Button('Crear collage', key='crear'), sg.Button('Volver', key='volver')])
-        layout.append([sg.Image(key='previa', size=(300, 300))])  # Elemento de imagen para la vista previa del collage
-
-        window = sg.Window('Creador de collages - {}'.format(diseño_seleccionado), layout)
-
-        rutas_imagenes = [None] * num_imagenes
-
-        # Bucle de eventos de la segunda ventana
-        while True:
-            event, values = window.read()
-
-            if event == sg.WINDOW_CLOSED:
-                break
-            elif event.startswith('imagen'):
-                index = int(event[len('imagen'):])
-                rutas_imagenes[index] = values[event]
-                # Actualiza la vista previa si todas las imágenes son seleccionadas
-                if all(rutas_imagenes):
-                    seleccionador_diseño_collage(rutas_imagenes, 'previa.jpg', diseño_seleccionado)
-                    vista_previa = Image.open(ruta_imagenes)
-                    vista_previa.thumbnail((300, 300))
-                    window['previa'].update(data=ImageTk.PhotoImage(vista_previa))
-            elif event == 'crear':
-                try:
-                    if all(rutas_imagenes):
-                        ruta_salida = sg.popup_get_file('Guardar collage como',initial_folder=ruta_collages, save_as=True, file_types=(('JPEG', '*.jpg'), ('PNG', '*.png')))
-
-                        if ruta_salida == None or ruta_collages not in ruta_salida:
-                            sg.popup("Por favor, verifique que la ruta del archivo sea la que está guardada en configuración")
-                            continue
-                        else:
-                            seleccionador_diseño_collage(rutas_imagenes, ruta_salida, diseño_seleccionado)
-                            sg.popup('Collage creado exitosamente!', 'Archivo guardado en: {}'.format(ruta_salida))
-
-                except ValueError:
-                    sg.popup("Por favor, ingrese una extensión al archivo (.jpg o .png)")
-                    continue
-            
-            elif event == 'volver':
-                window.close()
-
-        window.close()
-
+# Cierra la ventana
+    window.close()
 #################################################### INTERFAZ USUARIO ####################################################################
 
 def interfaz_usuario(evento,datos,ruta,ruta_configuracion,ruta_archivo,ruta_imagenes):
@@ -714,24 +520,36 @@ def interfaz_usuario(evento,datos,ruta,ruta_configuracion,ruta_archivo,ruta_imag
         if event == sg.WINDOW_CLOSED or event == "Salir":
             break
 
-        elif event == 'Configuracion':          
+        elif event == 'Configuracion':
+            window.hide()          
             configuracion(ruta,evento)
+            window.un_hide()
 
         elif event == 'Ayuda':
+            window.hide()
             ayuda()
+            window.un_hide()
             
         elif event == 'Editar':
+            window.hide()
             editar_usuario(ruta_archivo,ruta_imagenes,ruta,evento)
+            window.un_hide()
 
 
         elif event == "Etiquetar":
+            window.hide()
             etiquetado(evento,ruta_tags,ruta_configuracion,ruta)
+            window.un_hide()
 
         elif event == "Meme":
+            window.hide()
             Meme(ruta,ruta_configuracion,evento)
+            window.un_hide()
 
         elif event == "Collage":
-            collage(ruta, ruta_configuracion)    
+            window.hide()
+            Collage()
+            window.un_hide()    
     
 
 
