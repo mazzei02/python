@@ -1,0 +1,38 @@
+[
+    {
+        "Alias": "Tomi",
+        "Repositorio de imagenes": "Imagenes",
+        "Repositorio de collage": "Imagenes/Collages",
+        "Repositorio de memes": "Imagenes/Memes"
+    },
+    {
+        "Alias": "Pato",
+        "Repositorio de imagenes": "Imagenes",
+        "Repositorio de collage": "Imagenes/Collages",
+        "Repositorio de memes": "Imagenes/Memes"
+    },
+    {
+        "Alias": "Lean",
+        "Repositorio de imagenes": "Imagenes",
+        "Repositorio de collage": "Imagenes/Collages",
+        "Repositorio de memes": "Imagenes/Memes"
+    },
+    {
+        "Alias": "clari",
+        "Repositorio de imagenes": "Imagenes",
+        "Repositorio de collage": "Imagenes/Collages",
+        "Repositorio de memes": "Imagenes/Memes"
+    },
+    {
+        "Alias": "Batman",
+        "Repositorio de imagenes": "Imagenes",
+        "Repositorio de collage": "../..",
+        "Repositorio de memes": "Imagenes/Memes"
+    },
+    {
+        "Alias": "Ale",
+        "Repositorio de imagenes": "Imagenes",
+        "Repositorio de collage": "Imagenes/Collages",
+        "Repositorio de memes": "Imagenes/Memes"
+    }
+]

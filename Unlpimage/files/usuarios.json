@@ -1,0 +1,106 @@
+[
+    {
+        "Alias": "Invitado",
+        "Nombre": "Invitado",
+        "Edad": "0",
+        "Genero": "Otro",
+        "Genero_alt": "No especificado",
+        "Imagen": "Imagenes/ProfilePictures/abeja2.png"
+    },
+    {
+        "Alias": "Tomi",
+        "Nombre": "Tomas Tobias Mazzei",
+        "Edad": "23",
+        "Genero": "Masculino",
+        "Genero_alt": "-",
+        "Imagen": "Imagenes/ProfilePictures/gato2.png"
+    },
+    {
+        "Alias": "Batman",
+        "Nombre": "Bruce Wayne",
+        "Edad": "45",
+        "Genero": "Masculino",
+        "Genero_alt": "-",
+        "Imagen": "Imagenes/ProfilePictures/gato2.png"
+    },
+    {
+        "Alias": "Pato",
+        "Nombre": "Luca",
+        "Edad": "27",
+        "Genero": "Masculino",
+        "Genero_alt": "-",
+        "Imagen": "Imagenes/ProfilePictures/caballo2.png"
+    },
+    {
+        "Alias": "jxskier",
+        "Nombre": "julian",
+        "Edad": "23",
+        "Genero": "Masculino",
+        "Genero_alt": "-",
+        "Imagen": "Imagenes/ProfilePictures/nutria2.png"
+    },
+    {
+        "Alias": "Lean",
+        "Nombre": "Leandro Agustin Palacio Zegarra",
+        "Edad": "23",
+        "Genero": "Otro",
+        "Genero_alt": "Autobot",
+        "Imagen": "Imagenes/ProfilePictures/abeja2.png"
+    },
+    {
+        "Alias": "enzosaave",
+        "Nombre": "enzo",
+        "Edad": "42",
+        "Genero": "Otro",
+        "Genero_alt": "harry potter",
+        "Imagen": "Imagenes/ProfilePictures/abeja2.png"
+    },
+    {
+        "Alias": "fotos",
+        "Nombre": "victoria",
+        "Edad": "100",
+        "Genero": "Femenino",
+        "Genero_alt": "",
+        "Imagen": "Imagenes/ProfilePictures/nutria2.png"
+    },
+    {
+        "Alias": "clari",
+        "Nombre": "Clara",
+        "Edad": "23",
+        "Genero": "Femenino",
+        "Genero_alt": "",
+        "Imagen": "Imagenes/ProfilePictures/abeja2.png"
+    },
+    {
+        "Alias": "Carpincho",
+        "Nombre": "Carpincho",
+        "Edad": "19",
+        "Genero": "Femenino",
+        "Genero_alt": "",
+        "Imagen": "Imagenes/ProfilePictures/abeja2.png"
+    },
+    {
+        "Alias": "Juanchin",
+        "Nombre": "Juan Pablo",
+        "Edad": "23",
+        "Genero": "Masculino",
+        "Genero_alt": "-",
+        "Imagen": "Imagenes/ProfilePictures/gato2.png"
+    },
+    {
+        "Alias": "Poisson",
+        "Nombre": "Poisson",
+        "Edad": "88",
+        "Genero": "Masculino",
+        "Genero_alt": "-",
+        "Imagen": "Imagenes/ProfilePictures/nutria2.png"
+    },
+    {
+        "Alias": "Ale",
+        "Nombre": "Alex Ramirez",
+        "Edad": "29",
+        "Genero": "Otro",
+        "Genero_alt": "No binario",
+        "Imagen": "Imagenes/ProfilePictures/cabra2.png"
+    }
+]
